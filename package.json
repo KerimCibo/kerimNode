@@ -1,0 +1,15 @@
+{
+    "name": "ivs-node-app",
+    "version": "1.0.0",
+    "description": "Interactive Voting System (IVS) Node.js aplikacija",
+    "main": "server.js",
+    "scripts": {
+      "start": "node server.js"
+    },
+    "dependencies": {
+      "express": "^4.18.2"
+    },
+    "author": "Vaše ime",
+    "license": "MIT"
+  }
+  

@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="hr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Voting System</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <h1>Interactive Voting System</h1>
+    <p>Odaberite omiljeni programski jezik i glasajte:</p>
+    <form id="voteForm">
+        <label>
+            <input type="radio" name="language" value="JavaScript" required> JavaScript
+        </label><br>
+        <label>
+            <input type="radio" name="language" value="Python"> Python
+        </label><br>
+        <label>
+            <input type="radio" name="language" value="Java"> Java
+        </label><br>
+        <label>
+            <input type="radio" name="language" value="CSharp"> C#
+        </label><br>
+        <button type="submit">Glasaj</button>
+    </form>
+    <p id="voteMessage"></p>
+
+    <h2>Rezultati glasanja</h2>
+    <button id="loadResults">Učitaj rezultate</button>
+    <div id="results"></div>
+
+    <script>
+      
+        document.getElementById('voteForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const selected = document.querySelector('input[name="language"]:checked').value;
+            fetch('/api/vote', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ language: selected })
+            })
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('voteMessage').textContent = data.message;
+            })
+            .catch(error => console.error('Error:', error));
+        });
+
+        document.getElementById('loadResults').addEventListener('click', function() {
+            fetch('/api/results')
+            .then(response => response.json())
+            .then(data => {
+                let resultHtml = '<ul>';
+                for (const lang in data) {
+                    resultHtml += `<li>${lang}: ${data[lang]}</li>`;
+                }
+                resultHtml += '</ul>';
+                document.getElementById('results').innerHTML = resultHtml;
+            })
+            .catch(error => console.error('Error fetching results:', error));
+        });
+    </script>
+</body>
+</html>
